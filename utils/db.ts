@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import mongodb from 'mongodb';
 
-const MONGO_URI = 'mongodb://localhost:27017/';
+const MONGO_URI = 'mongodb://localhost:27017';
 
-async function connectDb(dbName: string) {
+async function connectDb() {
   // 0 -> disconnected
   if (mongoose.connections[0].readyState) {
     console.log(
@@ -12,7 +12,7 @@ async function connectDb(dbName: string) {
     return;
   }
   try {
-    const db = await mongoose.connect(`${MONGO_URI}${dbName}`, {
+    await mongoose.connect(`${MONGO_URI}/testing`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
