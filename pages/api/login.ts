@@ -2,29 +2,21 @@ import { NextApiResponse, NextApiRequest } from 'next';
 import bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { User } from 'models';
-import { connectDb } from 'utils';
+import { connectDb, handler, ErrorResponse } from 'utils';
+import { NextHandler } from 'next-connect';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await connectDb();
-  if (req.method === 'GET') {
+export default handler.get(
+  async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
+    await connectDb();
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Email not found.' });
+      return next(new ErrorResponse('Invalid Email.', 400));
     }
 
     const result = await bcrypt.compare(password, user.password);
-
-    if (!result) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid password.',
-      });
-    }
 
     const token = sign(
       {
@@ -42,5 +34,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
   }
-  res.end(`Http ${req.method} is not supported for this endpoint.`);
-};
+);

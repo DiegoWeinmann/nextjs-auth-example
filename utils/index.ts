@@ -1,3 +1,5 @@
 export { connectDb } from './db';
-export { authHandler } from './authHandler';
+export { authMiddleware } from './authMiddleware';
+export { default as handler } from './handler';
+export { ErrorResponse } from './errorResponse';
 export * from './types.d';

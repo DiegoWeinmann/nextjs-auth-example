@@ -1,20 +1,18 @@
 import { NextApiResponse, NextApiRequest } from 'next';
 import { User } from 'models';
 import bcrypt from 'bcryptjs';
-import { connectDb } from 'utils';
+import { connectDb, handler, ErrorResponse } from 'utils';
+import { NextHandler } from 'next-connect';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await connectDb();
-  if (req.method === 'POST') {
-    console.log(req.body);
+export default handler.post(
+  async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
+    await connectDb();
     const { name, email, password } = req.body;
 
     const user = await User.findOne({ email });
 
     if (user) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Email already exists.' });
+      return next(new ErrorResponse('Email already exists.', 400));
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,5 +27,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       data: newUser.toObject({ getters: true, versionKey: false }),
     });
   }
-  res.end(`Http ${req.method} is not supported for this endpoint.`);
-};
+);
