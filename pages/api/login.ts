@@ -18,6 +18,10 @@ export default handler.get(
 
     const result = await bcrypt.compare(password, user.password);
 
+    if (!result) {
+      return next(new ErrorResponse('Invalid password.', 401));
+    }
+
     const token = sign(
       {
         email: user.email,
