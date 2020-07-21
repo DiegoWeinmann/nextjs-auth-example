@@ -7,6 +7,7 @@ import { NextHandler } from 'next-connect';
 export default handler.post(
   async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     await connectDb();
+    console.log(req.body);
     const { name, email, password } = req.body;
 
     const user = await User.findOne({ email });

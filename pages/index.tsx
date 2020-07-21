@@ -1,5 +1,20 @@
-import { Button } from '../components/Button';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function Index() {
-  return <div>Next App</div>;
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem('token'));
+    if (token) {
+      axios
+        .get('/api/current-user', {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+    }
+  }, []);
+  return <div className='container mx-auto'>NextApp</div>;
 }

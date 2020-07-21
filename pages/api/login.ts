@@ -5,7 +5,7 @@ import { User } from 'models';
 import { connectDb, handler, ErrorResponse } from 'utils';
 import { NextHandler } from 'next-connect';
 
-export default handler.get(
+export default handler.post(
   async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     await connectDb();
     const { email, password } = req.body;

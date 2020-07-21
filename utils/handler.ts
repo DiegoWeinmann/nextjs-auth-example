@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import nextConnect, { Middleware } from 'next-connect';
+import nextConnect from 'next-connect';
 import { NextApiExtendedRequest } from './types';
 import { ErrorResponse } from './errorResponse';
 
@@ -11,6 +11,7 @@ export default nextConnect<
     res.status(405).json({ error: `Method ${req.method} Not Allowed.` });
   },
   onError(error: ErrorResponse | Error, _req, res) {
+    console.log(error);
     if (error instanceof ErrorResponse) {
       return res.status(error.statusCode).json({
         success: false,
