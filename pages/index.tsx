@@ -1,7 +1,5 @@
+import { Button } from '../components/Button';
+
 export default function Index() {
-  return (
-    <div>
-      <h1>NextApp</h1>
-    </div>
-  );
+  return <div>Next App</div>;
 }
