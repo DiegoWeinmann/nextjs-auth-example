@@ -1,4 +1,3 @@
-import { NextApiResponse, NextApiRequest } from 'next';
 import { User } from 'models';
 import { connectDb, authMiddleware, NextApiExtendedRequest } from 'utils';
 import { handler } from 'utils';
