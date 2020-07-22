@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { InputControl, TasaButton, TasaInput } from './styles';
+import { useRouter } from 'next/router';
 
 export const TasaForm = () => {
+  const router = useRouter();
   const [tasa, setTasa] = useState<string>('');
   const [plazo, setPlazo] = useState<string>('');
   const [segmento, setSegmento] = useState<string>('');
@@ -10,12 +12,20 @@ export const TasaForm = () => {
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post('/api/tasas', {
-        tasa,
-        plazo,
-        segmento,
-      })
-      .then((response) => console.log(response))
+      .post(
+        '/api/tasas',
+        {
+          tasa,
+          plazo,
+          segmento,
+        },
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.getItem('token')),
+          },
+        }
+      )
+      .then((response) => router.reload())
       .catch((err) => console.log(err));
   };
 
