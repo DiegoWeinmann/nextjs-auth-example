@@ -1,7 +1,10 @@
 import '../style/styles.css';
-import { useAuthUser } from 'utils/useAuthUser';
+import { UserContextProvider } from 'context';
 
 export default function MyApp({ Component, pageProps }) {
-  useAuthUser();
-  return <Component {...pageProps} />;
+  return (
+    <UserContextProvider>
+      <Component {...pageProps} />
+    </UserContextProvider>
+  );
 }

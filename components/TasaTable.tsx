@@ -2,18 +2,20 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table } from './styles';
 import { ITasa } from 'models/Tasa';
+import { getToken } from 'context/userContext/utils';
 
 export const TasaTable = () => {
   const [tasas, setTasas] = useState<ITasa[]>([]);
   useEffect(() => {
-    axios
-      .get<{ data: ITasa[] }>('/api/tasas', {
-        headers: { authorization: JSON.parse(localStorage.getItem('token')) },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setTasas(response.data.data);
-      });
+    getToken() &&
+      axios
+        .get<{ data: ITasa[] }>('/api/tasas', {
+          headers: { authorization: JSON.parse(localStorage.getItem('token')) },
+        })
+        .then((response) => {
+          console.log(response.data);
+          setTasas(response.data.data);
+        });
   }, []);
   return (
     <div className='w-2/3 mx-auto'>

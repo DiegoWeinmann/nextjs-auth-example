@@ -2,8 +2,11 @@ import axios from 'axios';
 import { Input, Label } from './styles';
 import { SecondaryButton } from 'components/Button';
 import { useState } from 'react';
+import { setToken, getCurrentUser } from 'context/userContext/utils';
+import { useUserContextDispatch } from 'context/userContext/hooks';
 
 export const LoginForm = () => {
+  const dispatch = useUserContextDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -18,10 +21,12 @@ export const LoginForm = () => {
       setPassword('');
       const token = response.data.data.token;
       if (token) {
-        localStorage.setItem('token', JSON.stringify(token));
+        setToken(token);
+        getCurrentUser(dispatch, '/api/current-user');
       }
     } catch (err) {
       console.log(err);
+      setToken('');
     }
   };
 
